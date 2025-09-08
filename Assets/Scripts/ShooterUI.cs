@@ -8,28 +8,23 @@ public class ShooterUI : MonoBehaviour
     public Slider forceSlider;
     public Dropdown massDropdown;
 
+    [Header("Sliders de Rotación")]
+    public Slider horizontalSlider; // El slider que controla la rotación horizontal
+
     void Start()
     {
-        // Inicializar sliders y dropdown
-        angleSlider.onValueChanged.AddListener(UpdateAngle);
-        forceSlider.onValueChanged.AddListener(UpdateForce);
-        massDropdown.onValueChanged.AddListener(UpdateMass);
+        // Enlaces para la lógica de disparo y movimiento vertical
+        angleSlider.onValueChanged.AddListener(shooter.UpdateAngle);
+
+        // Enlace para la lógica de disparo (fuerza y masa)
+        forceSlider.onValueChanged.AddListener(shooter.UpdateForce);
+        massDropdown.onValueChanged.AddListener(shooter.UpdateMass);
+
+        // Nuevo enlace para el slider de rotación horizontal
+        horizontalSlider.onValueChanged.AddListener(shooter.UpdateHorizontal);
     }
 
-    void UpdateAngle(float value)
-    {
-        shooter.angle = value;
-    }
-
-    void UpdateForce(float value)
-    {
-        shooter.force = value;
-    }
-
-    void UpdateMass(int index)
-    {
-        // Ejemplo: opciones de masa 0.5, 1, 2
-        float[] masses = { 0.5f, 1f, 2f };
-        shooter.projectileMass = masses[index];
-    }
+    // Las funciones de UpdateAngle, UpdateForce y UpdateMass ya no son necesarias aquí
+    // porque se llaman directamente a las funciones del script Shooter.
+    // Solo si necesitas alguna lógica extra en la UI, las dejarías.
 }

@@ -5,13 +5,38 @@ public class Shooter : MonoBehaviour
 {
     [Header("Referencias")]
     public GameObject projectilePrefab; // Prefab del proyectil
-    public Transform firePoint;         // Punto desde donde se dispara
+    public Transform firePoint;        // Punto desde donde se dispara
 
     [Header("Parámetros de disparo")]
-    public float angle = 30f;           // Ángulo en grados
-    public float force = 20f;           // Fuerza de lanzamiento
-    public float projectileMass = 1f;   // Masa del proyectil
+    public float force = 20f;          // Fuerza de lanzamiento
+    public float projectileMass = 1f;  // Masa del proyectil
+    public float currentAngle = 30f;   // Ángulo de disparo actual
+
+    [Header("Controles UI")]
+    // Estos campos no son necesarios si los Sliders están en otro script (ShooterUI)
+    // Pero si los mantienes, asegúrate de que no haya conflictos en el Inspector.
     [SerializeField] private Slider angleSlider;
+    [SerializeField] private Slider horizontalSlider;
+
+    [Header("Objetos del cañón")]
+    public Transform cannonBase;        // El objeto que gira horizontalmente (padre)
+    public Transform cannonBarrel;      // El objeto que se inclina verticalmente (hijo)
+
+    void Start()
+    {
+        // Enlaces de los Sliders con las funciones de rotación del cañón
+        // Estos listeners pueden ir en ShooterUI, pero también funcionan aquí
+        // si los Sliders están en el mismo objeto que este script.
+        if (angleSlider != null)
+        {
+            angleSlider.onValueChanged.AddListener(UpdateAngle);
+        }
+        if (horizontalSlider != null)
+        {
+            horizontalSlider.onValueChanged.AddListener(UpdateHorizontal);
+        }
+    }
+
     void Update()
     {
         // Presionar Espacio para disparar
@@ -23,26 +48,48 @@ public class Shooter : MonoBehaviour
 
     void Fire()
     {
-        // Crear el proyectil en el firePoint
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-
-        // Asegurarse de que tenga Rigidbody
         Rigidbody rb = proj.GetComponent<Rigidbody>();
         if (rb == null) rb = proj.AddComponent<Rigidbody>();
-
-        // Configurar la masa
         rb.mass = projectileMass;
 
-        // Calcular dirección según ángulo
-        float rad = angle * Mathf.Deg2Rad;
+        // Calcula la dirección del proyectil usando el ángulo actual
+        float rad = currentAngle * Mathf.Deg2Rad;
         Vector3 dir = firePoint.forward * Mathf.Cos(rad) + firePoint.up * Mathf.Sin(rad);
 
-        // Aplicar fuerza
         rb.AddForce(dir.normalized * force, ForceMode.Impulse);
     }
-    public void CannonAngle()
+
+    // Funciones para actualizar los parámetros del cañón
+    // Estas funciones son llamadas por los Sliders y el Dropdown en el script ShooterUI
+    public void UpdateAngle(float value)
     {
-        float angle = angleSlider.value;
-        transform.localRotation = Quaternion.Euler(angle, 0, 0);
+        currentAngle = value;
+        if (cannonBarrel != null)
+        {
+            cannonBarrel.localRotation = Quaternion.Euler(value, 0, 0);
+        }
+    }
+
+    public void UpdateHorizontal(float value)
+    {
+        if (cannonBase != null)
+        {
+            cannonBase.localRotation = Quaternion.Euler(0, value, 0);
+        }
+    }
+
+    public void UpdateForce(float value)
+    {
+        force = value;
+    }
+
+    public void UpdateMass(int index)
+    {
+        float[] masses = { 0.5f, 1f, 2f };
+        if (index >= 0 && index < masses.Length)
+        {
+            projectileMass = masses[index];
+        }
     }
 }
