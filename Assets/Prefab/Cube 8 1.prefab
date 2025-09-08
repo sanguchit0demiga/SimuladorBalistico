@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1415132294162031621}
   - component: {fileID: 35109145821303699}
   - component: {fileID: 782805546982805037}
+  - component: {fileID: 1324591736398753525}
   m_Layer: 0
   m_Name: Cube 8 1
   m_TagString: Cube
@@ -153,3 +154,15 @@ FixedJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &1324591736398753525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8228464455414371273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401b5156ee3829a43ae4f6d26722ac56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

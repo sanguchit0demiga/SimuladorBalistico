@@ -10,11 +10,11 @@ public class Shooter : MonoBehaviour
     [Header("Parámetros de disparo")]
     public float force = 20f;
     public float projectileMass = 1f;
-    public float currentAngle = 30f; // Ángulo vertical
+    public float currentAngle = 30f; 
 
     [Header("Rotación horizontal")]
     public Transform cannonBase;
-    public float rotationSpeed = 300f; // grados por segundo
+    public float rotationSpeed = 300f; 
     public float maxHorizontalAngle = 45f;
     private float currentHorizontalAngle = 0f;
 
@@ -23,7 +23,6 @@ public class Shooter : MonoBehaviour
 
     void Update()
     {
-        // Presionar Espacio para disparar
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Fire();
@@ -37,15 +36,11 @@ public class Shooter : MonoBehaviour
         if (rb == null) rb = proj.AddComponent<Rigidbody>();
         rb.mass = projectileMass;
 
-        // La dirección del disparo se obtiene directamente del punto de disparo.
-        // firePoint ya está rotado por los movimientos del cañón.
         Vector3 fireDirection = firePoint.forward;
 
-        // Aplicamos la fuerza en la dirección del cañón.
         rb.AddForce(fireDirection * force, ForceMode.Impulse);
     }
 
-    // --- Funciones de control ---
     public void UpdateAngle(float value)
     {
         currentAngle = value;
@@ -69,7 +64,6 @@ public class Shooter : MonoBehaviour
         }
     }
 
-    // Rotación horizontal por botones
     public void RotateLeftContinuous()
     {
         currentHorizontalAngle -= rotationSpeed * Time.deltaTime;
