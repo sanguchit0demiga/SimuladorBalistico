@@ -1,41 +1,24 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Shooter : MonoBehaviour
 {
     [Header("Referencias")]
-    public GameObject projectilePrefab; // Prefab del proyectil
-    public Transform firePoint;        // Punto desde donde se dispara
+    public GameObject projectilePrefab;
+    public Transform firePoint;
 
     [Header("Parámetros de disparo")]
-    public float force = 20f;          // Fuerza de lanzamiento
-    public float projectileMass = 1f;  // Masa del proyectil
-    public float currentAngle = 30f;   // Ángulo de disparo actual
+    public float force = 20f;
+    public float projectileMass = 1f;
+    public float currentAngle = 30f; // Ángulo vertical
 
-    [Header("Controles UI")]
-    // Estos campos no son necesarios si los Sliders están en otro script (ShooterUI)
-    // Pero si los mantienes, asegúrate de que no haya conflictos en el Inspector.
-    [SerializeField] private Slider angleSlider;
-    [SerializeField] private Slider horizontalSlider;
+    [Header("Rotación horizontal")]
+    public Transform cannonBase;
+    public float rotationSpeed = 300f; // grados por segundo
+    public float maxHorizontalAngle = 45f;
+    private float currentHorizontalAngle = 0f;
 
-    [Header("Objetos del cañón")]
-    public Transform cannonBase;        // El objeto que gira horizontalmente (padre)
-    public Transform cannonBarrel;      // El objeto que se inclina verticalmente (hijo)
-
-    void Start()
-    {
-        // Enlaces de los Sliders con las funciones de rotación del cañón
-        // Estos listeners pueden ir en ShooterUI, pero también funcionan aquí
-        // si los Sliders están en el mismo objeto que este script.
-        if (angleSlider != null)
-        {
-            angleSlider.onValueChanged.AddListener(UpdateAngle);
-        }
-        if (horizontalSlider != null)
-        {
-            horizontalSlider.onValueChanged.AddListener(UpdateHorizontal);
-        }
-    }
+    [Header("Rotación vertical")]
+    public Transform cannonBarrel;
 
     void Update()
     {
@@ -53,29 +36,20 @@ public class Shooter : MonoBehaviour
         if (rb == null) rb = proj.AddComponent<Rigidbody>();
         rb.mass = projectileMass;
 
-        // Calcula la dirección del proyectil usando el ángulo actual
         float rad = currentAngle * Mathf.Deg2Rad;
-        Vector3 dir = firePoint.forward * Mathf.Cos(rad) + firePoint.up * Mathf.Sin(rad);
+        // Dirección basada en el barril
+        Vector3 dir = cannonBarrel.forward * Mathf.Cos(rad) + cannonBarrel.up * Mathf.Sin(rad);
 
         rb.AddForce(dir.normalized * force, ForceMode.Impulse);
     }
 
-    // Funciones para actualizar los parámetros del cañón
-    // Estas funciones son llamadas por los Sliders y el Dropdown en el script ShooterUI
+    // --- Funciones de control ---
     public void UpdateAngle(float value)
     {
         currentAngle = value;
         if (cannonBarrel != null)
         {
             cannonBarrel.localRotation = Quaternion.Euler(value, 0, 0);
-        }
-    }
-
-    public void UpdateHorizontal(float value)
-    {
-        if (cannonBase != null)
-        {
-            cannonBase.localRotation = Quaternion.Euler(0, value, 0);
         }
     }
 
@@ -90,6 +64,29 @@ public class Shooter : MonoBehaviour
         if (index >= 0 && index < masses.Length)
         {
             projectileMass = masses[index];
+        }
+    }
+
+    // Rotación horizontal por botones
+    public void RotateLeftContinuous()
+    {
+        currentHorizontalAngle -= rotationSpeed * Time.deltaTime;
+        currentHorizontalAngle = Mathf.Clamp(currentHorizontalAngle, -maxHorizontalAngle, maxHorizontalAngle);
+        UpdateHorizontalRotation();
+    }
+
+    public void RotateRightContinuous()
+    {
+        currentHorizontalAngle += rotationSpeed * Time.deltaTime;
+        currentHorizontalAngle = Mathf.Clamp(currentHorizontalAngle, -maxHorizontalAngle, maxHorizontalAngle);
+        UpdateHorizontalRotation();
+    }
+
+    private void UpdateHorizontalRotation()
+    {
+        if (cannonBase != null)
+        {
+            cannonBase.localRotation = Quaternion.Euler(0, currentHorizontalAngle, 0);
         }
     }
 }
