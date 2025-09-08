@@ -6,7 +6,7 @@ public class ShooterUI : MonoBehaviour
 {
     public Shooter shooter;
     public Slider angleSlider;
-    public Slider forceSlider;
+    public Slider forceSlider; // Declaración correcta
     public Dropdown massDropdown;
 
     [Header("Botones de rotación horizontal")]
@@ -18,6 +18,7 @@ public class ShooterUI : MonoBehaviour
 
     void Start()
     {
+        // Vinculación de sliders y dropdown
         if (angleSlider != null)
             angleSlider.onValueChanged.AddListener(shooter.UpdateAngle);
 
@@ -27,6 +28,7 @@ public class ShooterUI : MonoBehaviour
         if (massDropdown != null)
             massDropdown.onValueChanged.AddListener(shooter.UpdateMass);
 
+        // Vinculación de botones con eventos de puntero
         if (rotateLeftButton != null)
             AddPointerListeners(rotateLeftButton, "left");
 
@@ -36,9 +38,12 @@ public class ShooterUI : MonoBehaviour
 
     private void AddPointerListeners(Button button, string direction)
     {
-        EventTrigger trigger = button.gameObject.AddComponent<EventTrigger>();
+        EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
+        // Si el objeto no tiene EventTrigger, se lo añadimos
+        if (trigger == null)
+            trigger = button.gameObject.AddComponent<EventTrigger>();
 
-        // Pointer Down
+        // Lógica de Pointer Down
         EventTrigger.Entry pointerDown = new EventTrigger.Entry();
         pointerDown.eventID = EventTriggerType.PointerDown;
         pointerDown.callback.AddListener((data) =>
@@ -48,19 +53,20 @@ public class ShooterUI : MonoBehaviour
         });
         trigger.triggers.Add(pointerDown);
 
-        // Pointer Up
+        // Lógica de Pointer Up
         EventTrigger.Entry pointerUp = new EventTrigger.Entry();
         pointerUp.eventID = EventTriggerType.PointerUp;
         pointerUp.callback.AddListener((data) =>
         {
-            if (direction == "left") isLeftPressed = false;
-            else if (direction == "right") isRightPressed = false;
+            isLeftPressed = false;
+            isRightPressed = false;
         });
         trigger.triggers.Add(pointerUp);
     }
 
     void Update()
     {
+        // Llamada continua mientras los botones están presionados
         if (isLeftPressed)
             shooter.RotateLeftContinuous();
 

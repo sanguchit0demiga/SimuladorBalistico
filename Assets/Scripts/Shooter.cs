@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shooter : MonoBehaviour
 {
@@ -36,11 +37,12 @@ public class Shooter : MonoBehaviour
         if (rb == null) rb = proj.AddComponent<Rigidbody>();
         rb.mass = projectileMass;
 
-        float rad = currentAngle * Mathf.Deg2Rad;
-        // Dirección basada en el barril
-        Vector3 dir = cannonBarrel.forward * Mathf.Cos(rad) + cannonBarrel.up * Mathf.Sin(rad);
+        // La dirección del disparo se obtiene directamente del punto de disparo.
+        // firePoint ya está rotado por los movimientos del cañón.
+        Vector3 fireDirection = firePoint.forward;
 
-        rb.AddForce(dir.normalized * force, ForceMode.Impulse);
+        // Aplicamos la fuerza en la dirección del cañón.
+        rb.AddForce(fireDirection * force, ForceMode.Impulse);
     }
 
     // --- Funciones de control ---
