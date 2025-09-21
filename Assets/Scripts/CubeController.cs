@@ -10,22 +10,13 @@ public class CubeController : MonoBehaviour
         reportManager = FindFirstObjectByType<ReportManager>();
     }
 
-    void OnCollisionEnter(Collision collision)
+    public void ReportHit(float flightTime, float projectileVelocity)
     {
-        if (!hit && collision.gameObject.CompareTag("Projectile"))
+        if (!hit)
         {
             hit = true;
             reportManager.CubeHit();
-
-           
-            Projectile proj = collision.gameObject.GetComponent<Projectile>();
-            if (proj != null)
-            {
-                float flightTime = Time.time - proj.startTime;
-                float velocity = proj.GetComponent<Rigidbody>().linearVelocity.magnitude;
-
-                reportManager.ShowReport(flightTime, velocity);
-            }
+            reportManager.ShowReport(flightTime, projectileVelocity);
         }
     }
 }

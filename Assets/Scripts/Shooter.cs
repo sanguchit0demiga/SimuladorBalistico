@@ -10,11 +10,11 @@ public class Shooter : MonoBehaviour
     [Header("Parámetros de disparo")]
     public float force = 20f;
     public float projectileMass = 1f;
-    public float currentAngle = 30f; 
+    public float currentAngle = 30f;
 
     [Header("Rotación horizontal")]
     public Transform cannonBase;
-    public float rotationSpeed = 300f; 
+    public float rotationSpeed = 300f;
     public float maxHorizontalAngle = 45f;
     private float currentHorizontalAngle = 0f;
 
@@ -32,6 +32,7 @@ public class Shooter : MonoBehaviour
     void Fire()
     {
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+
         Rigidbody rb = proj.GetComponent<Rigidbody>();
         if (rb == null) rb = proj.AddComponent<Rigidbody>();
         rb.mass = projectileMass;
@@ -39,6 +40,12 @@ public class Shooter : MonoBehaviour
         Vector3 fireDirection = firePoint.forward;
 
         rb.AddForce(fireDirection * force, ForceMode.Impulse);
+
+        Projectile p = proj.GetComponent<Projectile>();
+        if (p != null)
+        {
+            p.startTime = Time.time;
+        }
     }
 
     public void UpdateAngle(float value)

@@ -22,7 +22,7 @@ public class ReportManager : MonoBehaviour
         int score = cubesHit * 100;
 
         velocityText.text = "Relative Velocity: " + velocity.ToString("F2") + " m/s";
-        scoreText.text = "Score: " + score + "\nCubes Hit: " + cubesHit;
+        scoreText.text = "Score: " + score;
         flightTimeText.text = "Flight Time: " + flightTime.ToString("F2") + " s";
     }
 
@@ -33,7 +33,7 @@ public class ReportManager : MonoBehaviour
 
        
         velocityText.text = "Relative Velocity: 0 m/s";
-        scoreText.text = "Score: 0\nCubes Hit: 0";
+        scoreText.text = "Score: 0";
         flightTimeText.text = "Flight Time: 0 s";
     }
 }
