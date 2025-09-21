@@ -10,13 +10,16 @@ public class CubeController : MonoBehaviour
         reportManager = FindFirstObjectByType<ReportManager>();
     }
 
-    public void ReportHit(float flightTime, float projectileVelocity)
+    public void ReportHit(float angle, float force, float mass, float flightTime, float projectileVelocity, bool hit, float distance)
     {
-        if (!hit)
+        if (!this.hit)
         {
-            hit = true;
-            reportManager.CubeHit();
-            reportManager.ShowReport(flightTime, projectileVelocity);
+            this.hit = true;
+            if (reportManager != null)
+            {
+                reportManager.CubeHit();
+            }
+            reportManager.ShowReport(angle, force, mass, flightTime, projectileVelocity, hit, distance);
         }
     }
 }

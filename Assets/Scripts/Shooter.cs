@@ -34,17 +34,23 @@ public class Shooter : MonoBehaviour
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
 
         Rigidbody rb = proj.GetComponent<Rigidbody>();
-        if (rb == null) rb = proj.AddComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = proj.AddComponent<Rigidbody>();
+        }
         rb.mass = projectileMass;
 
         Vector3 fireDirection = firePoint.forward;
-
         rb.AddForce(fireDirection * force, ForceMode.Impulse);
 
         Projectile p = proj.GetComponent<Projectile>();
         if (p != null)
         {
             p.startTime = Time.time;
+            p.angle = currentAngle;      
+            p.force = force;             
+            p.mass = projectileMass;    
+            p.startPosition = firePoint.position; 
         }
     }
 
@@ -64,7 +70,7 @@ public class Shooter : MonoBehaviour
 
     public void UpdateMass(int index)
     {
-        float[] masses = { 0.5f, 1f, 2f };
+        float[] masses = { 1f, 5f, 10f };
         if (index >= 0 && index < masses.Length)
         {
             projectileMass = masses[index];
