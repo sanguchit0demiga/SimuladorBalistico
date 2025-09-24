@@ -3,6 +3,7 @@ using System;
 [Serializable]
 public class Result
 {
+    // Todas tus propiedades
     public string shotName;
     public bool hit;
     public float velocity;
@@ -13,6 +14,10 @@ public class Result
     public float mass;
     public float angle;
 
+    // Constructor vacío
+    public Result() { }
+
+    // Tu constructor original
     public Result(string shotName, bool hit, float velocity, float distance, int cubesHit, float flightTime, float force, float mass, float angle)
     {
         this.shotName = shotName;
