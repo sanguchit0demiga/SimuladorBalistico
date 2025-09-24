@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [HideInInspector] public float startTime;
-    [HideInInspector] public float angle;
-    [HideInInspector] public float force;
-    [HideInInspector] public float mass;
-    [HideInInspector] public Vector3 startPosition;
+    [SerializeField] public float startTime;
+    [SerializeField] public float angle;
+    [SerializeField] public float force;
+    [SerializeField] public float mass;
+    [SerializeField] public Vector3 startPosition;
+    public FirebaseManager firebaseManager;
 
     private void OnCollisionEnter(Collision collision)
     {

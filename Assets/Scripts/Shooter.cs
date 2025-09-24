@@ -21,8 +21,16 @@ public class Shooter : MonoBehaviour
     [Header("Rotación vertical")]
     public Transform cannonBarrel;
 
+    [Header("Línea Predictiva")]
+    public LineRenderer lineRenderer;
+    public int linePoints = 50;
+    public float timeBetweenPoints = 0.1f;
+
     void Update()
     {
+        // Solo dibuja la trayectoria si no se está disparando
+        DrawTrajectory();
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Fire();
@@ -47,10 +55,10 @@ public class Shooter : MonoBehaviour
         if (p != null)
         {
             p.startTime = Time.time;
-            p.angle = currentAngle;      
-            p.force = force;             
-            p.mass = projectileMass;    
-            p.startPosition = firePoint.position; 
+            p.angle = currentAngle;
+            p.force = force;
+            p.mass = projectileMass;
+            p.startPosition = firePoint.position;
         }
     }
 
@@ -61,11 +69,15 @@ public class Shooter : MonoBehaviour
         {
             cannonBarrel.localRotation = Quaternion.Euler(value, 0, 0);
         }
+        // Dibuja la trayectoria cada vez que se actualiza el ángulo
+        DrawTrajectory();
     }
 
     public void UpdateForce(float value)
     {
         force = value;
+        // Dibuja la trayectoria cada vez que se actualiza la fuerza
+        DrawTrajectory();
     }
 
     public void UpdateMass(int index)
@@ -75,6 +87,8 @@ public class Shooter : MonoBehaviour
         {
             projectileMass = masses[index];
         }
+        // Dibuja la trayectoria cada vez que se actualiza la masa
+        DrawTrajectory();
     }
 
     public void RotateLeftContinuous()
@@ -96,6 +110,21 @@ public class Shooter : MonoBehaviour
         if (cannonBase != null)
         {
             cannonBase.localRotation = Quaternion.Euler(0, currentHorizontalAngle, 0);
+        }
+    }
+
+    void DrawTrajectory()
+    {
+        Vector3 startPosition = firePoint.position;
+        Vector3 startVelocity = firePoint.forward * force / projectileMass;
+
+        lineRenderer.positionCount = linePoints;
+
+        for (int i = 0; i < linePoints; i++)
+        {
+            float time = i * timeBetweenPoints;
+            Vector3 position = startPosition + startVelocity * time + Physics.gravity * time * time / 2f;
+            lineRenderer.SetPosition(i, position);
         }
     }
 }
