@@ -11,9 +11,7 @@ public class FirebaseManager : MonoBehaviour
     public static int shotNumber = 0;
 
     [Header("UI de prueba")]
-    // Referencia al TextMeshProUGUI para mostrar los datos
     public TextMeshProUGUI debugText;
-    // Opcional: InputField para buscar por número de disparo
     public TMP_InputField shotIndexInput;
 
     [Header("Referencia al ReportManager")]
@@ -21,7 +19,6 @@ public class FirebaseManager : MonoBehaviour
 
     private void Start()
     {
-        // Al iniciar, obtenemos el número de disparos actual para que el contador no se reinicie
         GetShotNumber();
     }
 
@@ -84,7 +81,6 @@ public class FirebaseManager : MonoBehaviour
         SaveToDataBase(result);
     }
 
-    // Nuevo método para leer y mostrar un solo disparo
     public void GetSingleResult()
     {
         string shotIndex = shotIndexInput.text;
@@ -94,19 +90,18 @@ public class FirebaseManager : MonoBehaviour
             return;
         }
 
-        // Usamos la lógica del material de clase para leer un solo objeto
         RestClient.Get<Result>(baseUrl + "shots/" + shotIndex + ".json")
             .Then(response =>
             {
                 if (response != null)
                 {
                     debugText.text =
-                        $"Disparo {shotIndex}\n" +
-                        $"Velocidad: {response.velocity:F2} m/s\n" +
-                        $"Distancia: {response.distance:F2} m\n" +
-                        $"Impacto: {(response.hit ? "Sí" : "No")}\n" +
+                        $"Shot #{shotIndex}\n" +
+                        $"Velocity: {response.velocity:F2} m/s\n" +
+                        $"Distance: {response.distance:F2} m\n" +
+                        $"Impact: {(response.hit ? "Yes" : "No")}\n" +
                         $"Cubes Hit: {response.cubesHit}\n" +
-                        $"Tiempo de Vuelo: {response.flightTime:F2} s";
+                        $"Flight time: {response.flightTime:F2} s";
                 }
                 else
                 {

@@ -11,11 +11,11 @@ public class ReportManager : MonoBehaviour
     public Text velocityText;
     public Text resultText;
     public Text distanceText;
-    public Text cubesHitText; // Opcional, si querés mostrar los hits en UI
+    public Text cubesHitText;
 
     private int cubesHit = 0;
 
-    // Llamar cuando un cubo es impactado
+    
     public void CubeHit()
     {
         cubesHit++;
@@ -23,7 +23,7 @@ public class ReportManager : MonoBehaviour
             cubesHitText.text = "Cubes Hit: " + cubesHit;
     }
 
-    // Resetea hits y UI
+   
     public void ResetHits()
     {
         cubesHit = 0;
@@ -33,7 +33,6 @@ public class ReportManager : MonoBehaviour
         ResetReport();
     }
 
-    // Muestra todos los datos del lanzamiento
     public void ShowReport(float angle, float force, float mass,
                            float flightTime, float velocity,
                            bool hit, float distance)
@@ -49,7 +48,6 @@ public class ReportManager : MonoBehaviour
         distanceText.text = "Distance: " + distance.ToString("F2") + " m";
     }
 
-    // Resetea solo la UI
     public void ResetReport()
     {
         angleText.text = "Angle: 0°";

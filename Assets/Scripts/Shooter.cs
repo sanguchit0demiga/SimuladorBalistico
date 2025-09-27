@@ -69,14 +69,12 @@ public class Shooter : MonoBehaviour
         {
             cannonBarrel.localRotation = Quaternion.Euler(value, 0, 0);
         }
-        // Dibuja la trayectoria cada vez que se actualiza el ángulo
         DrawTrajectory();
     }
 
     public void UpdateForce(float value)
     {
         force = value;
-        // Dibuja la trayectoria cada vez que se actualiza la fuerza
         DrawTrajectory();
     }
 
@@ -87,7 +85,6 @@ public class Shooter : MonoBehaviour
         {
             projectileMass = masses[index];
         }
-        // Dibuja la trayectoria cada vez que se actualiza la masa
         DrawTrajectory();
     }
 

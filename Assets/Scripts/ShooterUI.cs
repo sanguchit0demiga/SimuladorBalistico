@@ -9,12 +9,14 @@ public class ShooterUI : MonoBehaviour
     public Slider forceSlider; 
     public Dropdown massDropdown;
 
-    [Header("Botones de rotación horizontal")]
+   
     public Button rotateLeftButton;
     public Button rotateRightButton;
 
     private bool isLeftPressed = false;
     private bool isRightPressed = false;
+    public GameObject resultsPanel;
+    public Button closeButton;
 
     void Start()
     {
@@ -34,8 +36,22 @@ public class ShooterUI : MonoBehaviour
 
         if (rotateRightButton != null)
             AddPointerListeners(rotateRightButton, "right");
-    }
 
+        if (resultsPanel !=null)
+            resultsPanel.SetActive(false);
+        if (closeButton != null)
+            closeButton.onClick.AddListener(() => resultsPanel.SetActive(false));
+    }
+    public void ShowResultsPanel()
+    {
+        if (resultsPanel != null)
+            resultsPanel.SetActive(true);
+    }
+    public void HideResultsPanel()
+    {
+        if (resultsPanel != null)
+            resultsPanel.SetActive(false);
+    }
     private void AddPointerListeners(Button button, string direction)
     {
         EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();

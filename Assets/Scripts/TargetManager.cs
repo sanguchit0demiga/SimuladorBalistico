@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ResetManager : MonoBehaviour
 {
-    [Header("Prefab (opcional si querés reinstanciar)")]
     public GameObject cubePrefab;
 
     private List<GameObject> cubes = new List<GameObject>();
